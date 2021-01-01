@@ -55,13 +55,7 @@ function preload()
   "Images/zombieOFFICIAL/Idle/skeleton-idle_15.png",
   "Images/zombieOFFICIAL/Idle/skeleton-idle_16.png")
 
-  coin = loadAnimation("Images/ScoreOFFICIAL/Coin1.png",
-  "Images/ScoreOFFICIAL/Coin2.png",
-  "Images/ScoreOFFICIAL/Coin3.png",
-  "Images/ScoreOFFICIAL/Coin4.png",
-  "Images/ScoreOFFICIAL/Coin5.png",
-  "Images/ScoreOFFICIAL/Coin6.png",
-  "Images/ScoreOFFICIAL/Coin1.png")
+  coin = loadImage("Images/ScoreOFFICIAL/Coin1.png")
 
   levelComplete = loadImage("Images/levelCompleteScreenOFFICIAL.png");
 
@@ -189,8 +183,8 @@ function draw() {
   }
   else if(gameState === "level2")
   {
-    //console.log(windowWidth/2-player.x);
-    //console.log(windowHeight/2-player.y);
+    console.log(windowWidth/2-player.x);
+    console.log(windowHeight/2-player.y);
 
     player.scale = 0.28;
     camera.position.x=player.x;
@@ -202,6 +196,8 @@ function draw() {
     back1.scale = 1.1;
 
     level2SpritesProp();
+    s84.displace(player);
+    s84.displace(zombieGroup2);
 
     
 
@@ -216,7 +212,7 @@ function draw() {
             if(zombieGroup2.length > 20)
             {
               zombieGroup2.get(i).destroy();
-              console.log(zombieGroup2.length);
+              //console.log(zombieGroup2.length);
             }
 
 
@@ -291,6 +287,8 @@ function draw() {
   fill("white");
   textSize(20);
   text("Score: " + score, camera.position.x - 450, camera.position.y - 395);
+  coinSprite = createSprite(camera.position.x - 500, camera.position.y - 400);
+  coinSprite.addImage("coin image", coin);
   text("Level: " + gameState, camera.position.x - 450, camera.position.y - 370);
 
 }
@@ -318,7 +316,7 @@ function spawnZombies2()
   for (var i=0; i<100; i++) 
   {
     
-	  var zombie = createSprite(Math.round(random(windowWidth/2-(windowWidth/2 + 100), windowWidth - 100)),Math.round(random(windowWidth/2-(windowWidth/2 + 100), windowWidth - 100)));
+	  var zombie = createSprite(Math.round(random(windowWidth/2 - 1420, windowWidth/2 + 1420)),Math.round(random(windowHeight/2 - 1420, windowHeight/2 + 1420)));
 	
     zombie.addAnimation("idle",zombieIdle);
     zombie.addAnimation("moving", zombieMove);
@@ -454,6 +452,19 @@ function level2Sprites()
   s77 = createSprite(windowWidth/2 - 1150, windowHeight/2 + 1305, 1160, 30);
   s78 = createSprite(s77.x + 75, s77.y + 800, 1800, 30);
   s79 = createSprite(windowWidth/2 - 1715, windowHeight/2 - windowHeight/2, 30, 6000);
+  s86 = createSprite(s78.x + 2250, s78.y, 1800, 30);
+
+  //generators
+  s80 = createSprite(windowWidth/2 - 797, windowHeight/2 + 1570, 435, 220);
+  s81 = createSprite(windowWidth/2 - 1180, windowHeight/2 + 1830, 800, 190);
+  s82 = createSprite(s81.x - 250, s81.y - 120, 140, 560);
+  s83 = createSprite(s81.x, s81.y - 250, 300, 300);
+
+  //top wall
+  s84 = createSprite(windowWidth/2 + 60, windowHeight/2 - 1204, 4000, 100);
+
+  //right wall
+  s85 = createSprite(windowHeight/2 + 1965, 0, 30, 6000);
 
   s1.visible=false;
   s2.visible=false;
@@ -534,89 +545,20 @@ function level2Sprites()
   s77.visible=false;
   s78.visible=false;
   s79.visible=false;
-
-  wallsGroup.add(s1);
-wallsGroup.add(s2);
-wallsGroup.add(s3);
-wallsGroup.add(s4);
-wallsGroup.add(s5);
-wallsGroup.add(s6);
-wallsGroup.add(s7);
-wallsGroup.add(s8);
-wallsGroup.add(s9);
-wallsGroup.add(s10);
-wallsGroup.add(s11);
-wallsGroup.add(s12);
-wallsGroup.add(s13);
-wallsGroup.add(s14);
-wallsGroup.add(s15);
-wallsGroup.add(s16);
-wallsGroup.add(s17);
-wallsGroup.add(s18);
-wallsGroup.add(s19);
-wallsGroup.add(s20);
-wallsGroup.add(s21);
-wallsGroup.add(s22);
-wallsGroup.add(s23);
-wallsGroup.add(s24);
-wallsGroup.add(s25);
-wallsGroup.add(s26);
-wallsGroup.add(s27);
-wallsGroup.add(s28);
-wallsGroup.add(s29);
-wallsGroup.add(s30);
-wallsGroup.add(s31);
-wallsGroup.add(s32);
-wallsGroup.add(s33);
-wallsGroup.add(s34);
-wallsGroup.add(s35);
-wallsGroup.add(s36);
-wallsGroup.add(s37);
-wallsGroup.add(s38);
-wallsGroup.add(s39);
-wallsGroup.add(s40);
-wallsGroup.add(s41);
-wallsGroup.add(s42);
-wallsGroup.add(s43);
-wallsGroup.add(s44);
-wallsGroup.add(s45);
-wallsGroup.add(s46);
-wallsGroup.add(s47);
-wallsGroup.add(s48);
-wallsGroup.add(s49);
-wallsGroup.add(s50);
-wallsGroup.add(s51);
-wallsGroup.add(s52);
-wallsGroup.add(s53);
-wallsGroup.add(s54);
-wallsGroup.add(s55);
-wallsGroup.add(s56);
-wallsGroup.add(s57);
-wallsGroup.add(s58);
-wallsGroup.add(s59);
-wallsGroup.add(s60);
-wallsGroup.add(s61);
-wallsGroup.add(s62);
-wallsGroup.add(s63);
-wallsGroup.add(s64);
-wallsGroup.add(s65);
-wallsGroup.add(s66);
-wallsGroup.add(s67);
-wallsGroup.add(s68);
-wallsGroup.add(s69);
-wallsGroup.add(s70);
-wallsGroup.add(s71);
-wallsGroup.add(s72);
-wallsGroup.add(s73);
-wallsGroup.add(s74);
-wallsGroup.add(s75);
+  s80.visible = false;
+  s81.visible = false;
+  s82.visible = false;
+  s83.visible = false;
+  s84.visible = false;
+  s85.visible = false;
+  s86.visible = false;
 
 }
 
 function level2SpritesProp()
 {
-  if(frameCount%10 === 0)
-  {
+  //if(frameCount%1 === 0)
+  //{
   s1.displace(player);
   s2.displace(player);
   s3.displace(player);
@@ -696,6 +638,13 @@ function level2SpritesProp()
   s77.displace(player);
   s78.displace(player);
   s79.displace(player);
+  s80.displace(player);
+  s81.displace(player);
+  s82.displace(player);
+  s83.displace(player);
+  
+  s85.displace(player);
+  s86.displace(player);
 
 
   s1.displace(zombieGroup2);
@@ -777,6 +726,13 @@ function level2SpritesProp()
   s77.displace(zombieGroup2);
   s78.displace(zombieGroup2);
   s79.displace(zombieGroup2);
-  }
+  s80.displace(zombieGroup2);
+  s81.displace(zombieGroup2);
+  s82.displace(zombieGroup2);
+  s83.displace(zombieGroup2);
+
+  s85.displace(zombieGroup2);
+  s86.displace(zombieGroup2);
+  //}
 
 }
