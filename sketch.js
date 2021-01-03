@@ -1,8 +1,12 @@
 var back1, back2, back3, track1, track2, track3
-var player, playerCar, playerSprite
+var player, playerCar, playerSprite, playerSpriteIdle
 var zombieMove, zombieIdle;
 var zombieGroup, zombieGroup2;
-var wallsGroup;
+var zombieAngle;
+var deltaX;
+var deltaY;
+var distance;
+var wallsGroup, muzzleFlashGroup, bulletSprite, bulletsGroup;
 var s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, s29, s30, s31, s32, s33, s34, s35, s36, s37, s38, s39, s40, s41, s42, s43, s44, s45, s46, s47, s48, s49, s50, s51, s52, s53, s54, s55, s56, s57, s58, s59, s60, s61, s62, s63, s64, s65, s66, s67, s68, s69, s70, s71, s72, s73, s74, s75, s76, s77, s78, s79, s80, s81, s82, s83, s84, s85, s86, s87, s88, s89, s90, s91, s92, s93, s94, s95, s96, s97, s98, s99, s100;
 var score, coin, coinSprite;
 var gameState="level1";
@@ -16,7 +20,7 @@ function preload()
   track1 = loadImage("Images/desertroadOFFICIAL.png");
   track2 = loadImage("Images/map1OFFICIAL.png");
   //track3 = loadImage("Images/track.jpg");
-  playerCar = loadImage("Images/carOfficial.png");
+  playerCar = loadAnimation("Images/carOfficial.png", "Images/carOfficial2.png");
 
 
   zombieMove = loadAnimation("Images/zombieOFFICIAL/Move/skeleton-move_0.png",
@@ -60,7 +64,50 @@ function preload()
   levelComplete = loadImage("Images/levelCompleteScreenOFFICIAL.png");
 
  /* playerSprite=loadAnimation("Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_0.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_1.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_2.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_3.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_4.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_3.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_5.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_6.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_7.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_8.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_9.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_10.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_11.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_13.png","Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_14.png")*/
-  playerSprite=loadImage("Images/playerOFFICIAL/knife/meleeattack/survivor-meleeattack_knife_0.png");
+  playerSprite=loadAnimation("Images/playerOFFICIAL/rifle/move/survivor-move_rifle_0.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_1.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_2.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_3.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_4.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_5.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_6.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_7.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_8.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_9.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_10.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_11.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_12.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_13.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_14.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_15.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_16.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_17.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_18.png",
+  "Images/playerOFFICIAL/rifle/move/survivor-move_rifle_19.png");
+
+  playerSpriteIdle = loadAnimation("Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_0.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_1.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_2.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_3.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_4.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_5.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_6.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_7.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_8.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_9.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_10.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_11.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_12.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_13.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_14.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_15.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_16.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_17.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_18.png",
+  "Images/playerOFFICIAL/rifle/idle/survivor-idle_rifle_19.png");
+
+  muzzleFlashImage = loadImage("Images/Weapon Effects/Pistol/PistolMuzzleFlash.png");
+  bulletSprite = loadImage("Images/Weapon Effects/Rifle/RifleAmmo.png");
 
   zombieMoan = loadSound("Sounds/zombieMoan.wav");
 }
@@ -77,11 +124,14 @@ function setup() {
 
   player = createSprite(windowWidth/2, windowHeight/2+4200,20,50);
   player.addAnimation("player_driving", playerCar);
-  player.addImage("player_level2", playerSprite);
+  player.addAnimation("player_level2", playerSprite);
+  player.addAnimation("player_idle", playerSpriteIdle);
   player.scale = 0.05;
   zombieGroup= new Group();
   zombieGroup2 = new Group();
   wallsGroup = new Group();
+  muzzleFlashGroup = new Group();
+  bulletsGroup = new Group();
 
   
 
@@ -174,7 +224,7 @@ function draw() {
 
       camera.position.x=player.x;
       camera.position.y=player.y;
-      player.changeImage("player_level2", playerSprite);
+      player.changeAnimation("player_idle", playerSpriteIdle);
       player.x = windowWidth/2 + 60
       player.y = 2220
       
@@ -183,12 +233,13 @@ function draw() {
   }
   else if(gameState === "level2")
   {
-    console.log(windowWidth/2-player.x);
-    console.log(windowHeight/2-player.y);
+    //console.log(windowWidth/2-player.x);
+    //console.log(windowHeight/2-player.y);
 
     player.scale = 0.28;
     camera.position.x=player.x;
     camera.position.y=player.y;
+    player.changeAnimation("player_idle", playerSpriteIdle);
 
     //player.scale = 0.05
     back1.changeImage("track2", track2);
@@ -199,51 +250,113 @@ function draw() {
     s84.displace(player);
     s84.displace(zombieGroup2);
 
-    
+    for(var i=0;i<zombieGroup.length;i++)
+    {
+      if(zombieGroup.length >0 )
+      {
+        zombieGroup.destroy();
+      }
+    }
 
     for(var i=0;i<zombieGroup2.length;i++)
     {
       zombieGroup2.get(i).visible=true
-      
+
+      if(zombieGroup2.get(i).isTouching(bulletsGroup))
+      {
+        zombieGroup2.get(i).destroy();
+        score = score + 10
+  
+      }  
+
       if(zombieGroup2.length > 0)
       {
+        //deltaX = player.x - zombieGroup2.get(i).x;
+        //deltaY = player.y - zombieGroup2.get(i).y;
+        distance = Math. sqrt(((player.x - zombieGroup2.get(i).x) * (player.x - zombieGroup2.get(i).x)) + ((player.y - zombieGroup2.get(i).y) * (player.y - zombieGroup2.get(i).y)));
+
+        if(distance < 500)
+        {
+          zombieGroup2.get(i).changeAnimation("moving", zombieMove);
+          zombieAngle = Math.atan((player.y - zombieGroup2.get(i).y) / (player.x - zombieGroup2.get(i).x)); 
+          if (player.x - zombieGroup2.get(i).x < 0)
+          {
+            zombieAngle = zombieAngle + PI;
+          }
+          zombieGroup2.get(i).velocityX = 3 * Math.cos(zombieAngle);  
+          zombieGroup2.get(i).velocityY = 3 * Math.sin(zombieAngle);
+          zombieMoan.play();
+        }
+
         if(waveCount === 1)
         {
-            if(zombieGroup2.length > 20)
+            if(zombieGroup2.length <= 10)
             {
-              zombieGroup2.get(i).destroy();
-              //console.log(zombieGroup2.length);
+              zombieGroup2.destroyEach();
+              waveCount = waveCount + 1;
+              spawnZombies2_2();
             }
-
-
+          
+        }
+        if(waveCount === 2)
+        {
+            if(zombieGroup2.length <= 10)
+            {
+              zombieGroup2.destroyEach();
+              waveCount = waveCount + 1;
+              spawnZombies2_3();
+            }
         }
       }
 
     }
 
-    
     if(keyDown(UP_ARROW))
     {
+      player.changeAnimation("player_level2", playerSprite);
       player.rotation = -90
       player.y = player.y - 5;
     }
   
     if(keyDown(LEFT_ARROW))
     {
+      player.changeAnimation("player_level2", playerSprite);
       player.rotation = 180
       player.x = player.x - 5;
     }
   
     if(keyDown(RIGHT_ARROW))
     {
+      player.changeAnimation("player_level2", playerSprite);
       player.rotation = 0
       player.x = player.x + 5;
     }
 
     if(keyDown(DOWN_ARROW))
     {
+      player.changeAnimation("player_level2", playerSprite);
       player.rotation = 90
       player.y = player.y + 5;
+    }
+
+    if(keyDown("space"))
+    {
+      fireEffects();
+      spawnBullets();
+
+      for(var i=0;i<bulletsGroup.length;i++)
+      {
+        
+      }
+
+      if(frameCount%2.5 === 0)
+      {
+      muzzleFlashGroup.destroyEach();
+      }
+    }
+    else
+    {
+      muzzleFlashGroup.destroyEach();
     }
 
     if(player.y > windowHeight/2 + 1730.5)
@@ -267,19 +380,7 @@ function draw() {
       camera.position.x = windowWidth/2 + 1005;
     }
 
-      for(var i=0;i<zombieGroup.length;i++)
-      {
-        //console.log("zombieGroup.length"+zombieGroup.length)
-        if(zombieGroup.length >0 )
-        {
-          if(player.y-zombieGroup.get(i).y < 300)
-          {
-          
-            zombieGroup.get(i).changeAnimation("moving", zombieMove);
-            zombieGroup.get(i).velocityY = 3; 
-          }
-      }
-    }
+
   }
   
 
@@ -287,15 +388,22 @@ function draw() {
   fill("white");
   textSize(20);
   text("Score: " + score, camera.position.x - 450, camera.position.y - 395);
-  coinSprite = createSprite(camera.position.x - 500, camera.position.y - 400);
-  coinSprite.addImage("coin image", coin);
+  //coinSprite = createSprite(camera.position.x - 500, camera.position.y - 400);
+  //coinSprite.addImage("coin image", coin);
   text("Level: " + gameState, camera.position.x - 450, camera.position.y - 370);
+
+  if(gameState === 2)
+  {
+    fill("white");
+    textSize(20);
+    text("Wave: " + waveCount, camera.position.x + 450, camera.position.y - 370);
+  }
 
 }
 //LEVEL 1 
 function spawnZombies() 
 {
-  for (var i=0; i<100; i++) 
+  for (var i=0; i<50; i++) 
   {
     
 	  var zombie = createSprite(Math.round(random(windowWidth/2-100,windowWidth/2+100)),Math.round(random(windowHeight/2 - 2984.5, windowHeight/2 + 3515.5)));
@@ -313,7 +421,7 @@ function spawnZombies()
 //LEVEL 2
 function spawnZombies2() 
 {
-  for (var i=0; i<100; i++) 
+  for (var i=0; i<30; i++) 
   {
     
 	  var zombie = createSprite(Math.round(random(windowWidth/2 - 1420, windowWidth/2 + 1420)),Math.round(random(windowHeight/2 - 1420, windowHeight/2 + 1420)));
@@ -321,12 +429,165 @@ function spawnZombies2()
     zombie.addAnimation("idle",zombieIdle);
     zombie.addAnimation("moving", zombieMove);
     zombie.rotation=90;
-	  zombie.scale = 0.3;
+    zombie.scale = 0.3;
+    zombie.rotateToDirection = true;
+    
+
 	
 	  //add each zombie to the group
 	  zombieGroup2.add(zombie);
   }
 }
+
+function spawnZombies2_2() 
+{
+  for (var i=0; i<40; i++) 
+  {
+    
+	  var zombie = createSprite(Math.round(random(windowWidth/2 - 1420, windowWidth/2 + 1420)),Math.round(random(windowHeight/2 - 1420, windowHeight/2 + 1420)));
+	
+    zombie.addAnimation("idle",zombieIdle);
+    zombie.addAnimation("moving", zombieMove);
+    zombie.rotation=90;
+    zombie.scale = 0.3;
+    zombie.rotateToDirection = true;
+	
+	  //add each zombie to the group
+	  zombieGroup2.add(zombie);
+  }
+}
+
+function spawnZombies2_3() 
+{
+  for (var i=0; i<50; i++) 
+  {
+    
+	  var zombie = createSprite(Math.round(random(windowWidth/2 - 1420, windowWidth/2 + 1420)),Math.round(random(windowHeight/2 - 1420, windowHeight/2 + 1420)));
+	
+    zombie.addAnimation("idle",zombieIdle);
+    zombie.addAnimation("moving", zombieMove);
+    zombie.rotation=90;
+    zombie.scale = 0.3;
+    zombie.rotateToDirection = true;
+	
+	  //add each zombie to the group
+	  zombieGroup2.add(zombie);
+  }
+}
+
+function fireEffects()
+{
+  if(frameCount%2 === 0)
+  {
+    var muzzleFlash = createSprite(player.x + 13, player.y - 45)
+    muzzleFlash.rotation = -90;
+    muzzleFlash.scale = 0.02;
+    muzzleFlash.addImage("rifle_fire_effect", muzzleFlashImage);
+    muzzleFlash.changeImage("rifle_fire_effect", muzzleFlashImage);
+
+    if(player.rotation === -90)
+    {
+      muzzleFlash.x = player.x + 13;
+      muzzleFlash.y = player.y - 45;
+      muzzleFlash.rotation = -90;
+    }
+
+    if(player.rotation === 0)
+    {
+      muzzleFlash.x = player.x + 45;
+      muzzleFlash.y = player.y + 13;
+      muzzleFlash.rotation = 0;
+    }
+
+    if(player.rotation === 180)
+    {
+      muzzleFlash.x = player.x - 45;
+      muzzleFlash.y = player.y - 13;
+      muzzleFlash.rotation = 180;
+    }
+
+    if(player.rotation === 90)
+    {
+      muzzleFlash.x = player.x - 13;
+      muzzleFlash.y = player.y + 45;
+      muzzleFlash.rotation = 90;
+    }
+
+    muzzleFlashGroup.add(muzzleFlash);
+
+  }
+}
+
+function spawnBullets()
+{
+  if(frameCount%2 === 0)
+  {
+
+
+  if(player.rotation === -90)
+    {
+      var bullets = createSprite(player.x + 13, player.y - 45);
+      bullets.scale = 0.008;
+      bullets.rotation = -90;
+      bullets.addImage("bullet_sprite", bulletSprite);
+      bullets.changeImage("bullet_sprite", bulletSprite);
+      bullets.lifetime = 100;
+
+      bullets.x = player.x + 13;
+      bullets.y = player.y - 45;
+      bullets.rotation = -90;
+      bullets.velocityY = -20;
+    }
+
+    if(player.rotation === 0)
+    {
+      var bullets = createSprite(player.x + 13, player.y - 45);
+      bullets.scale = 0.008;
+      bullets.rotation = -90;
+      bullets.addImage("bullet_sprite", bulletSprite);
+      bullets.changeImage("bullet_sprite", bulletSprite);
+      bullets.lifetime = 100;
+
+      bullets.x = player.x + 45;
+      bullets.y = player.y + 13;
+      bullets.rotation = 0;
+      bullets.velocityX = 20;
+    }
+
+    if(player.rotation === 180)
+    {
+      var bullets = createSprite(player.x + 13, player.y - 45);
+      bullets.scale = 0.008;
+      bullets.rotation = -90;
+      bullets.addImage("bullet_sprite", bulletSprite);
+      bullets.changeImage("bullet_sprite", bulletSprite);
+      bullets.lifetime = 100;
+
+      bullets.x = player.x - 45;
+      bullets.y = player.y - 13;
+      bullets.rotation = 180;
+      bullets.velocityX = -20;
+    }
+
+    if(player.rotation === 90)
+      {
+        var bullets = createSprite(player.x + 13, player.y - 45);
+        bullets.scale = 0.008;
+        bullets.rotation = -90;
+        bullets.addImage("bullet_sprite", bulletSprite);
+        bullets.changeImage("bullet_sprite", bulletSprite);
+        bullets.lifetime = 100;
+
+        bullets.x = player.x - 13;
+        bullets.y = player.y + 45;
+        bullets.rotation = 90;
+        bullets.velocityY = 20;
+      }
+
+  bulletsGroup.add(bullets);
+  }
+}
+
 function level2Sprites()
 {
   //office
